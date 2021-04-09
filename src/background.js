@@ -1,31 +1,33 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Menu, globalShortcut } from 'electron'
+import { app, protocol, BrowserWindow, Menu, globalShortcut, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-const ipc = require('electron').ipcMain;
+const ipc = ipcMain
+const init = require('./com/js/api/init.js')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
+
 var mainwin;
+// var initc = new init()
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 1800,
     height: 900,
     webPreferences: {
-
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false
     }
   })
-  mainwin = win;
-
+  mainwin = win
+  init.initipc(win,ipc)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -105,6 +107,3 @@ if (isDevelopment) {
     })
   }
 }
-ipc.on('tt', function (event,e) {
-  mainwin.webContents.send('ss', 'res:' + e);
-})
