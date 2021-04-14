@@ -16,6 +16,8 @@ export default {
     handle: function() {
       if (this.m.url) {
         this.$ipc.send('tobrowser', this.m.url);
+      } else {
+        this.$ipc.send('taskpage');
       }
     }
   }

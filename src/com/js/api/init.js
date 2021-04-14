@@ -1,9 +1,5 @@
 'use strict'
-
-const { app } = require('electron')
-
-class init {
-}
+class init {}
 init.initipc = function (win, ipc, shell, app) {
     ipc.on('boot', function (event, e) {
         init.getconfig(init.bootApps)
@@ -52,7 +48,7 @@ init.getconfig = function (func) {
 init.init_main = function () {
     win.webContents.send('inid',confdata)
 }
-init.bootApps = function () {
+init.bootApps = function (name) {
     var list = confdata['boot'];
     var i = 1;
     while (typeof (list[i]) != 'undefined') {

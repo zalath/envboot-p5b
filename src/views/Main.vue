@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div class="move"></div>
+    <div>
+      <a class='fa fa-times' style='color:red' @click="close()"></a>  |
+      <a class='fa fa-times' @click="closewin()"></a>
+    </div>
     <div class="main">
       <div class="menu">
         <div class="center">
@@ -21,16 +26,26 @@ export default {
     return {
       menu: [
         {
-          name: 'boot'
+          name: 'boot',
+          cmd: 'bootenv'
         }, {
-          name: 'starter'
+          name: 'starter',
+          cmd: 'starterlist'
         }, {
-          name: 'task'
+          name: 'task',
+          cmd: ''
         }
       ]
     }
   },
-  methods: {},
+  methods: {
+    close() {
+      this.$ipc.send('closeapp')
+    },
+    closewin() {
+      this.$ipc.send('closewin')
+    }
+  },
   created() {
     this.$ipc.send('initd');
     this.$ipc.on('inid', (event, e) => {
@@ -43,3 +58,10 @@ export default {
   }
 };
 </script>
+<style lang="stylus" scoped>
+.move
+  height 10px
+  width 100%
+  background-color red
+  -webkit-app-region drag
+</style>

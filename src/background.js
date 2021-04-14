@@ -1,11 +1,12 @@
 'use strict'
 
-import { shell, app, protocol, BrowserWindow, Menu, globalShortcut, ipcMain } from 'electron'
+import { shell, app, protocol, BrowserWindow, session, Menu, globalShortcut, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const ipc = ipcMain
 const init = require('./com/js/api/init.js')
+const task = require('./com/js/api/task.js')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -26,14 +27,16 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false,
-      // devTools: false,
+      devTools: true,
       nodeIntegration: true,
-      enableRemoteModule: true
+      enableRemoteModule: true,
+      contextIsolation: false
     }
   })
   mainwin = win
   //init all listeners
   init.initipc(win,ipc,shell,app)
+  task.listen(ipc)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -87,7 +90,13 @@ app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
-      await installExtension(VUEJS_DEVTOOLS)
+      await installExtension(VUEJS_DEVTOOLS);
+      // 新增的：安装vue-devtools
+      // const path = require("path")
+      // session.defaultSession.loadExtension(
+        // path.resolve("C:/Users/Administrator/AppData/Roaming/c2/extensions/nhdogjmejiglipccpnnnanhbledajbpd")  //这个是刚刚build好的插件目录
+      // )
+      // session.defaultSession.loadExtension("C:/Users/Administrator/AppData/Roaming/c2/extensions/nhdogjmejiglipccpnnnanhbledajbpd")  //这个是刚刚build好的插件目录
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString())
     }

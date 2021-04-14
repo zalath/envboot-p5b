@@ -46,10 +46,13 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - pm & tm
 - close btn
 
-
 ## effect
 - mouse move through
 - provide 'always on the top of the screen' switch
 
 ## config page
 - seperated window to alter configuration
+
+## other functions
+- bejson tool
+- timestamp tool
