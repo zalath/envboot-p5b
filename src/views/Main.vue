@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import menubar from '../components/p5/menubar'
+import menubar from '../components/main/menubar'
 export default {
   name: 'Main',
   components: {
@@ -33,7 +33,10 @@ export default {
           cmd: 'starterlist'
         }, {
           name: 'task',
-          cmd: ''
+          cmd: 'taskpage'
+        }, {
+          name: 'conf',
+          cmd: 'confpage'
         }
       ]
     }

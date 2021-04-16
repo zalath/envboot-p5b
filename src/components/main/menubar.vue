@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span @click='handle()'>{{ m.name }}{{order}}{{num}}</span>
+    <span @click='handle()'>{{ m.name }}-{{order}}-{{num}}</span>
   </div>
 </template>
 
@@ -17,7 +17,8 @@ export default {
       if (this.m.url) {
         this.$ipc.send('tobrowser', this.m.url);
       } else {
-        this.$ipc.send('taskpage');
+        console.log(this.m.cmd);
+        this.$ipc.send(this.m.cmd);
       }
     }
   }

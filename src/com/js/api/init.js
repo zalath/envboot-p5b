@@ -1,8 +1,10 @@
 'use strict'
+
+const conf = require("./conf")
 class init {}
 init.initipc = function (win, ipc, shell, app) {
     ipc.on('boot', function (event, e) {
-        init.getconfig(init.bootApps)
+        conf.getconfig(init.bootApps)
     })
     ipc.on('tt', function (event, e) {
         win.webContents.send('ss', 'res:' + e)
@@ -20,35 +22,15 @@ init.initipc = function (win, ipc, shell, app) {
         win.close()
     })
 }
-var confdata
 var win
 init.bootUp = function (window) {
     win = window
-    init.getconfig(init.init_main)
+    conf.getconfig(init.init_main)
 }
-init.getconfig = function (func) {
-    var path = __dirname + '/../c.json'
-    var fs = require('fs')
-    var confpath = ''
-    fs.readFile(path, 'utf8', function (err, data) {
-        if (err) return console.log(err);
-        else {
-            data = JSON.parse(data)
-            confpath = data.confpath;
-            fs.readFile(confpath, 'utf8', function (err, data) {
-                if (err) return console.log(err)
-                else {
-                    confdata = JSON.parse(data)
-                    if (func) func()
-                }
-            });
-        }
-    });
-}
-init.init_main = function () {
+init.init_main = function (confdata) {
     win.webContents.send('inid',confdata)
 }
-init.bootApps = function (name) {
+init.bootApps = function (confdata) {
     var list = confdata['boot'];
     var i = 1;
     while (typeof (list[i]) != 'undefined') {

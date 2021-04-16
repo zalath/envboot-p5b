@@ -20,7 +20,16 @@ module.exports = {
   },
   pluginOptions: {
       electronBuilder: {
-        nodeIntegration: true
+        nodeIntegration: true,
+        builderOptions: {
+          productName: 'p5b',
+          extraResources: [
+            {
+              from: './c.json',
+              to: '../c.json'
+            }
+          ]
+        }
       }
   }
 };

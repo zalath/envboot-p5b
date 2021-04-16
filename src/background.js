@@ -3,10 +3,12 @@
 import { shell, app, protocol, BrowserWindow, session, Menu, globalShortcut, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import conf from './com/js/api/conf.js'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const ipc = ipcMain
 const init = require('./com/js/api/init.js')
 const task = require('./com/js/api/task.js')
+const starter = require('./com/js/api/starter.js')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -36,7 +38,9 @@ async function createWindow() {
   mainwin = win
   //init all listeners
   init.initipc(win,ipc,shell,app)
+  starter.listen(ipc)
   task.listen(ipc)
+  conf.listen(ipc)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)

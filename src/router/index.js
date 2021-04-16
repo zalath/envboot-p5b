@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Main from '../views/Main.vue'
 import Task from '../views/Task.vue'
+import Starter from '../views/Starter.vue'
+import Conf from '../views/Conf.vue'
 
 const routes = [
   {
@@ -26,6 +28,16 @@ const routes = [
     path: '/task',
     name: 'task',
     component: Task
+  },
+  {
+    path: '/starter',
+    name: 'starter',
+    component: Starter
+  },
+  {
+    path: '/conf',
+    name: 'conf',
+    component: Conf
   }
 ]
 

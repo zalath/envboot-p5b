@@ -8,6 +8,7 @@ task.init = function(ipc) {
         width: 800,
         height: 800,
         frame: false,
+        title: 'Task',
         webPreferences: {
           webSecurity: false,
           nodeIntegration: true,
@@ -18,14 +19,11 @@ task.init = function(ipc) {
     twin = taskwin
     taskwin.loadURL(winURL + '#/task');
     taskwin.on('close', function() {
-        // console.log('closing')
-        // taskwin = null
         twin = null
     })
     if (!process.env.IS_TEST)taskwin.webContents.openDevTools();
     ipc.once('taskclose',function(event){
         try {
-            console.log(twin)
             taskwin.close()
         }catch(e){
             console.log(e)
@@ -39,7 +37,6 @@ task.listen = function(ipc) {
         } else {
             task.init(ipc)
         }
-        
     })
 }
 module.exports = task
