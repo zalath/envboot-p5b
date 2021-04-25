@@ -7,21 +7,46 @@
     <br/>
     <div>
       <div class="tlist">
+        <h1>starter</h1>
         <div v-for='(s,ind) in config.starter' :key='ind'>
-          <div v-if='s != ""'>{{s.name}}:{{s.path}}</div>
-          <br v-else />
+          <div v-if='s != ""'>
+            <span>{{ind}}:</span>
+            <input @onchange='changeval("starter",ind,"name")' :value='s.name'/>
+            <input :value='s.path'/>
+            <div class="fa fa-minus funcbtn" @click="del('starter',ind)"></div>
+          </div>
+          <div v-else></div>
         </div>
+        <div @click="changeval()">123123</div>
+        <br/>
         <div>
-          <div @click="addstarter()">add starter</div>
+          <div class="fa fa-plus funcbtn" @click="add('starter')"></div>
         </div>
+        <h1>menu</h1>
         <div v-for='(s,ind) in config.menu' :key='ind'>
-          <div>{{s.name}}:{{s.id}}:{{s.url}}</div>
+          <span>{{ind}}:</span>
+          <input ref='starter{{ind}}name' :value='s.name'/>
+          <input :value='s.url'/>
+          <div class="fa fa-minus funcbtn" @click="del('menu',ind)"></div>
+          <!-- <div>{{s.name}}:{{s.id}}:{{s.url}}</div> -->
         </div>
+        <br/>
+        <div>
+          <div class="fa fa-plus funcbtn" @click="add('menu')"></div>
+        </div>
+        <h1>boot</h1>
         <div v-for='(s,ind) in config.boot' :key='ind'>
-          <div>{{s}}</div>
+          <span>{{ind}}:</span>
+          <input :value='s'/>
+          <div class="fa fa-minus funcbtn" @click="del('boot',ind)"></div>
+        </div>
+        <br/>
+        <div>
+          <div class="fa fa-plus funcbtn" @click="add('boot')"></div>
         </div>
       </div>
     </div>
+    <div class="fa fa-check" @click="setconf()"></div>
   </div>
 </template>
 
@@ -54,11 +79,38 @@ export default {
         this.config = e
       }
     },
-    addstarter() {
-      this.config.starter.push({});
+    add(type) {
+      switch (type) {
+      case 'starter':
+        this.config.starter.push({name: '1', path: '2'})
+        break
+      case 'menu':
+        this.config.boot.push({name: '', url: ''})
+        break
+      case 'boot':
+        this.config.boot.push('')
+        break
+      }
     },
     setconf() {
-      this.$ipc.send('setconf', this.config)
+      var c = JSON.parse(JSON.stringify(this.config))
+      this.$ipc.send('setconf', c)
+    },
+    changeval() {
+      alert(this.$refs.starter1name.value)
+    },
+    del(type, i) {
+      switch (type) {
+      case 'starter':
+        this.config.starter.splice(i, 1)
+        break
+      case 'menu':
+        this.config.menu.splice(i, 1)
+        break
+      case 'boot':
+        this.config.boot.splice(i, 1)
+        break
+      }
     }
   }
 }
@@ -84,4 +136,7 @@ export default {
   -webkit-app-region no-drag
 .close
   color red
+.funcbtn
+  margin-left 10px
+  cursor pointer
 </style>

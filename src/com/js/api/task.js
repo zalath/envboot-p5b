@@ -7,7 +7,7 @@ task.init = function(ipc) {
     var taskwin = new BrowserWindow({
         width: 800,
         height: 800,
-        frame: false,
+        // frame: false,
         title: 'Task',
         webPreferences: {
           webSecurity: false,
@@ -21,7 +21,7 @@ task.init = function(ipc) {
     taskwin.on('close', function() {
         twin = null
     })
-    if (!process.env.IS_TEST)taskwin.webContents.openDevTools();
+    // if (!process.env.IS_TEST)taskwin.webContents.openDevTools();
     ipc.once('taskclose',function(event){
         try {
             taskwin.close()

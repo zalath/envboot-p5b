@@ -44,7 +44,6 @@ conf.listen = function(ipc) {
         } else {
             conf.init(ipc)
         }
-        
     })
 }
 conf.sendconf = function(confdata) {
@@ -66,6 +65,8 @@ conf.setconfig = function(data) {
     var path = process.cwd() + '/c.json'
     var fs = require('fs')
     var confdata = JSON.stringify(data)
-    fs.writeFile(path,confdata)
+    fs.writeFile(path,confdata,function(){
+        console.log('writed')
+    })
 }
 module.exports = conf
