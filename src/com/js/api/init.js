@@ -1,9 +1,10 @@
 'use strict'
 
+const exec = require('child_process').exec;
 const conf = require("./conf")
 class init {}
 init.initipc = function (win, ipc, shell, app) {
-    ipc.on('boot', function (event, e) {
+    ipc.on('bootenv', function (event, e) {
         conf.getconfig(init.bootApps)
     })
     ipc.on('tt', function (event, e) {

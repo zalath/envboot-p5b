@@ -66,7 +66,7 @@ conf.setconfig = function(data) {
     var fs = require('fs')
     var confdata = JSON.stringify(data)
     fs.writeFile(path,confdata,function(){
-        console.log('writed')
+        console.log('writen')
     })
 }
 module.exports = conf

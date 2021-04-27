@@ -11,7 +11,7 @@
         <div v-for='(s,ind) in config.starter' :key='ind'>
           <div v-if='s != ""'>
             <span>{{ind}}:</span>
-            <input @onchange='changeval("starter",ind,"name")' :value='s.name'/>
+            <input @change='changeval($event,"starter",ind,"name")' :value='s.name'/>
             <input :value='s.path'/>
             <div class="fa fa-minus funcbtn" @click="del('starter',ind)"></div>
           </div>
@@ -25,7 +25,7 @@
         <h1>menu</h1>
         <div v-for='(s,ind) in config.menu' :key='ind'>
           <span>{{ind}}:</span>
-          <input ref='starter{{ind}}name' :value='s.name'/>
+          <input :value='s.name'/>
           <input :value='s.url'/>
           <div class="fa fa-minus funcbtn" @click="del('menu',ind)"></div>
           <!-- <div>{{s.name}}:{{s.id}}:{{s.url}}</div> -->
@@ -82,7 +82,7 @@ export default {
     add(type) {
       switch (type) {
       case 'starter':
-        this.config.starter.push({name: '1', path: '2'})
+        this.config.starter.push({name: '', path: ''})
         break
       case 'menu':
         this.config.boot.push({name: '', url: ''})
@@ -96,8 +96,8 @@ export default {
       var c = JSON.parse(JSON.stringify(this.config))
       this.$ipc.send('setconf', c)
     },
-    changeval() {
-      alert(this.$refs.starter1name.value)
+    changeval(e, part, ind, col) {
+      this.config[part][ind][col] = e.target.value
     },
     del(type, i) {
       switch (type) {
