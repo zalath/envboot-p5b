@@ -22,7 +22,7 @@ conf.init = function(ipc) {
     starterwin.on('close', function() {
         cwin = null
     })
-    if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
+    // if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
     ipc.once('confclose',function(event){
         try {
             starterwin.close()
@@ -67,6 +67,7 @@ conf.setconfig = function(data) {
     var confdata = JSON.stringify(data)
     fs.writeFile(path,confdata,function(){
         console.log('writen')
+        cwin.webContents.send('confsaved');
     })
 }
 module.exports = conf

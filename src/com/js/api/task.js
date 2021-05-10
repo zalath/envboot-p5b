@@ -7,7 +7,7 @@ task.init = function(ipc) {
     var taskwin = new BrowserWindow({
         width: 800,
         height: 800,
-        // frame: false,
+        frame: false,
         title: 'Task',
         webPreferences: {
           webSecurity: false,

@@ -12,12 +12,11 @@
           <div v-if='s != ""'>
             <span>{{ind}}:</span>
             <input @change='changeval($event,"starter",ind,"name")' :value='s.name'/>
-            <input :value='s.path'/>
+            <input @change='changeval($event,"starter",ind,"path")' :value='s.path'/>
             <div class="fa fa-minus funcbtn" @click="del('starter',ind)"></div>
           </div>
           <div v-else></div>
         </div>
-        <div @click="changeval()">123123</div>
         <br/>
         <div>
           <div class="fa fa-plus funcbtn" @click="add('starter')"></div>
@@ -25,8 +24,8 @@
         <h1>menu</h1>
         <div v-for='(s,ind) in config.menu' :key='ind'>
           <span>{{ind}}:</span>
-          <input :value='s.name'/>
-          <input :value='s.url'/>
+          <input @change='changeval($event,"menu",ind,"name")' :value='s.name'/>
+          <input @change='changeval($event,"menu",ind,"url")' :value='s.url'/>
           <div class="fa fa-minus funcbtn" @click="del('menu',ind)"></div>
           <!-- <div>{{s.name}}:{{s.id}}:{{s.url}}</div> -->
         </div>
@@ -37,7 +36,7 @@
         <h1>boot</h1>
         <div v-for='(s,ind) in config.boot' :key='ind'>
           <span>{{ind}}:</span>
-          <input :value='s'/>
+          <input @change='changeval($event,"boot",ind,"")' :value='s'/>
           <div class="fa fa-minus funcbtn" @click="del('boot',ind)"></div>
         </div>
         <br/>
@@ -96,8 +95,12 @@ export default {
       var c = JSON.parse(JSON.stringify(this.config))
       this.$ipc.send('setconf', c)
     },
-    changeval(e, part, ind, col) {
-      this.config[part][ind][col] = e.target.value
+    changeval(e, part, ind, col = '') {
+      if (col === '') {
+        this.config[part][ind] = e.target.value
+      } else {
+        this.config[part][ind][col] = e.target.value
+      }
     },
     del(type, i) {
       switch (type) {
