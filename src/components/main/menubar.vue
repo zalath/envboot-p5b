@@ -1,5 +1,9 @@
 <template>
-    <div :class="classpart + ' menubar'" :style="style" @click='handle()'>{{ m.name }}-{{order}}-{{num}}</div>
+  <div class="menubarbox" :style="style">
+    <div class="menubar" :style="barstyle" @click='handle()'>{{ m.name }}</div>
+    <!-- -{{order}}/{{num}}《{{tangle}}。{{td}}。 -->
+    <div class="menubarshadow" :style="shadowstyle"></div>
+  </div>
 </template>
 
 <script>
@@ -14,9 +18,12 @@ export default {
   },
   data: function() {
     return {
-      classpart: '',
       style: '',
-      myorder: 0
+      shadowstyle: '',
+      barstyle: '',
+      myorder: 0,
+      tangle: 0,
+      td: 0
     }
   },
   methods: {
@@ -32,36 +39,39 @@ export default {
       this.style = '';
       var H2 = document.documentElement.clientHeight / 2
       var W2 = document.documentElement.clientWidth / 2
-      var r = 60
-      var min = 0
-      H2 < W2 ? min = H2 : min = W2
-      if (r > min) r = min
+      var r = 1
       var d = Math.floor(360 / this.num)
-      var angle = d * this.order
-      var x = 1
-      var y = 1
-      if (angle > 180) x = -1
-      if (angle > 90 && angle < 270) y = -1
-      angle = Math.PI * (angle / 360)
-      x = x * r * Math.sin(angle)
-      y = y * r * Math.cos(angle)
+      var angleval = d * this.order
+      this.tangle = angleval
+      var angle = Math.PI * angleval / 180
+      var y = r * Math.sin(angle)
+      var x = r * Math.cos(angle)
       if (x > 0) {
-        this.style += ' right:' + (W2 + Math.abs(x)) + 'px;'
+        this.style += 'left:' + (W2 + Math.abs(x)) + 'px;transform-origin:left;'
+        this.barstyle += 'padding-left:50px;'
+        this.shadowstyle += 'clip-path: polygon(0 50%, 97% 0, 100% 97%);'
       } else {
-        this.style += ' left:' + (W2 + Math.abs(x)) + 'px;'
+        this.style += 'right:' + (W2 + Math.abs(x)) + 'px;transform-origin:right;'
+        this.barstyle += 'padding-right:50px;'
+        this.shadowstyle += 'clip-path: polygon(0 0%, 100% 50%, 0% 97%);right:0px'
       }
-      this.style += ' top:' + (H2 + y) + 'px;'
+      this.style += ' top:' + (H2 - y) + 'px;'
+      var pre = -1
+      if ((angleval > 90 && angleval < 180) || (angleval > 270 && angleval < 360)) {
+        pre = 1
+      }
+      while (angleval >= 90) {
+        angleval = angleval - 90
+      }
+      this.style += 'transform:rotate(' + pre * angleval + 'deg);'
+      this.td = pre * angleval
+    },
+    getform: function() {
     }
   },
   created() {
-    // count every line's position and style
-    // position
     this.getposition()
-    // style
-    // if (this.order % 2 === 0) {
-    // this.classpart = 'menubarleft';
-    // } else this.classpart = 'menubarright';
-    // this.style = ''
+    this.getform()
   },
   watch: {
     winh2: function(newval, oldval) {
@@ -74,15 +84,23 @@ export default {
 };
 </script>
 <style scoped lang="stylus">
-.menubar
+.menubarbox
+  font-size 40px
   position absolute
-  line-height 30px
+  line-height 40px
   cursor pointer
+.menubarshadow
+  height 30px
+  width 200px
+  float left
+  background-color black
   &:hover
     background-color red
-    color white
-.menubarleft
-  right 60%
-.menubarright
-  left 60%
+.menubar
+  float left
+  font-family berlin
+  color black
+@font-face
+  font-family berlin
+  src url(../../../src/assets/berlin.ttf)
 </style>

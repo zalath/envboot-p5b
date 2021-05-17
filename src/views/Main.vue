@@ -12,6 +12,7 @@
         </div>
       </div>
     </div>
+    {{testval}}
     <div class="borderbox top left bordert borderl"></div>
     <div class="borderbox bottom left borderb borderl"></div>
     <div class="borderbox top right bordert borderr"></div>
@@ -47,7 +48,8 @@ export default {
       win: {
         H2: '',
         W2: ''
-      }
+      },
+      testval: 0
     }
   },
   methods: {
@@ -60,19 +62,20 @@ export default {
     resizewin() {
       this.win.H2 = document.documentElement.clientHeight / 2
       this.win.W2 = document.documentElement.clientWidth / 2
-      this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + (this.win.H2 - 15) + 'px;'
+      // this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + (this.win.H2 - 15) + 'px;'
+      this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + this.win.H2 + 'px;'
     }
   },
   created() {
     this.$ipc.send('initd');
     this.$ipc.on('inid', (event, e) => {
       this.menu = this.menu.concat(e.menu);
+      this.resizewin()
     })
     this.$ipc.on('ss', function (event, e) {
       alert(e);
       console.log(e)
     })
-    this.resizewin()
   },
   mounted() {
     const that = this
