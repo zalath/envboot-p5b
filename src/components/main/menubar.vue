@@ -1,14 +1,12 @@
 <template>
   <div class="menubarbox" :style="style" @click='handle()'>
     <div class="menubarscale">
-      <div class="menubarshadow" :style="shadowdstyle"></div>
-      <div class="menubarshadow" :style="shadowstyle"></div>
+      <div class="menubarshadow msred" :style="shadowdstyle"></div>
+      <div class="menubarshadow msblack" :style="shadowstyle"></div>
       <div :class="barclass+' menubar'" :style="barstyle">{{ m.name }}</div>
-      <!-- -{{order}}/{{num}}《{{tangle}}。{{td}}。 -->
     </div>
   </div>
 </template>
-
 <script>
 export default {
   name: 'menubar',
@@ -26,9 +24,7 @@ export default {
       shadowdstyle: '',
       barstyle: '',
       barclass: '',
-      myorder: 0,
-      tangle: 0,
-      td: 0
+      myorder: 0
     }
   },
   methods: {
@@ -44,22 +40,15 @@ export default {
       this.style = '';
       var H2 = document.documentElement.clientHeight / 2
       var W2 = document.documentElement.clientWidth / 2
-      var r = 1
-      var d = Math.floor(360 / this.num)
-      var angleval = d * this.order
-      this.tangle = angleval
+      var angleval = Math.floor(360 / this.num) * this.order
       var angle = Math.PI * angleval / 180
-      var y = r * Math.sin(angle)
-      var x = r * Math.cos(angle)
+      var y = Math.sin(angle)
+      var x = Math.cos(angle)
+      var rst = Math.random() * 100
       if (x > 0) {
-        this.style += 'left:' + (W2 + Math.abs(x) + 20) + 'px;transform-origin:left;'
-        this.barclass = 'menubarright';
-        this.shadowstyle += '';
+        this.formright(W2, x, rst)
       } else {
-        this.style += 'right:' + (W2 + Math.abs(x) + 20) + 'px;transform-origin:right;'
-        this.barclass = 'menubarleft';
-        this.shadowstyle += 'right:0px;'
-        this.shadowdstyle += 'right:0px;'
+        this.formleft(W2, x, rst)
       }
       var pre = -1
       if ((angleval > 90 && angleval < 180) || (angleval > 270 && angleval < 360)) {
@@ -74,28 +63,38 @@ export default {
         angleval = angleval - 90
       }
       this.style += 'transform:rotate(' + pre * angleval / 2 + 'deg);'
-      var ry = (20 + 10 * Math.random()) * (3 - Math.random() * 6)
-      var rx = (30 + 40 * Math.random()) * (3 - Math.random() * 6)
-      this.shadowstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg) perspective(50px);';
-      ry = (20 + 10 * Math.random()) * (3 - Math.random() * 6)
-      rx = (30 + 40 * Math.random()) * (3 - Math.random() * 6)
-      this.shadowdstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg) perspective(50px);';
-      this.shadowdstyle += 'background-color:red;width:300px;position:absolute;top:0px;';
-      this.td = pre * angleval
+      var ry = (20 + 10 * Math.random()) * (2 - Math.random() * 4)
+      var rx = (20 + 10 * Math.random()) * (2.5 - Math.random() * 5)
+      this.shadowstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg) perspective(50px);'
+      ry = (10 + 10 * Math.random()) * (2 - Math.random() * 4)
+      rx = (10 + 40 * Math.random()) * (2 - Math.random() * 4)
+      this.shadowdstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg) perspective(50px);'
+      var rw = Math.random() * 100 + 200
+      this.shadowdstyle += 'background-color:red;width:' + rw + 'px;position:absolute;top:0px;'
     },
-    getform: function() {
+    formleft(W2, x, rst) {
+      this.style += 'right:' + (W2 + Math.abs(x) + 20) + 'px;transform-origin:right;'
+      this.barclass = 'menubarleft'
+      this.shadowstyle += 'clip-path: polygon(0 0, 70% 0, 100% ' + rst + '%, 40% 100%,0% 100%);'
+      this.shadowstyle += 'right:0px;'
+      this.shadowdstyle += 'right:0px;'
+    },
+    formright(W2, x, rst) {
+      this.style += 'left:' + (W2 + Math.abs(x) + 20) + 'px;transform-origin:left;'
+      this.barclass = 'menubarright'
+      this.shadowstyle += ''
+      this.shadowstyle += 'clip-path: polygon(0 ' + rst + '%, 30% 0, 100% 0, 100% 100%,40% 100%);'
     }
   },
   created() {
     this.getposition()
-    this.getform()
   },
   watch: {
     winh2: function(newval, oldval) {
-      this.getposition();
+      this.getposition()
     },
     winw2: function(newval, oldval) {
-      this.getposition();
+      this.getposition()
     }
   }
 };
@@ -107,8 +106,7 @@ export default {
   line-height 40px
   cursor pointer
   &:hover
-    .menubarshadow
-      border 3px solid white
+    .msblack
     .menubar
       color red
 .menubar
