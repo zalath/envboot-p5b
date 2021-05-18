@@ -1,16 +1,19 @@
 <template>
   <div>
-    <div>
+    <!-- <div>
       <a class='fa fa-times' style='color:red' @click="close()"></a>  |
       <a class='fa fa-times' @click="closewin()"></a>
-    </div>
-    <div class="movebox" :style="moveboxstyle"></div>
+    </div> -->
     <div class="main">
       <div class="menu">
         <div class="center">
           <menubar v-for="(m,ind) in menu" :m='m' :num='menu.length' :order='ind' :winh2='win.H2' :winw2='win.W2' :key='ind'></menubar>
         </div>
       </div>
+    </div>
+    <div class="movebox" :style="moveboxstyle"></div>
+    <div class="closebtn" :style="closebtnstyle">
+      <a class='fa fa-times' @click="close()"></a>
     </div>
     {{testval}}
     <div class="borderbox top left bordert borderl"></div>
@@ -64,6 +67,7 @@ export default {
       this.win.W2 = document.documentElement.clientWidth / 2
       // this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + (this.win.H2 - 15) + 'px;'
       this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + this.win.H2 + 'px;'
+      this.closebtnstyle = 'left:' + (this.win.W2 - 10) + 'px;top:' + (this.win.H2 + 40) + 'px;'
     }
   },
   created() {
@@ -112,4 +116,12 @@ export default {
   height 30px
   background-color red
   -webkit-app-region drag
+  border-radius 50%
+.closebtn
+  position absolute
+  width 20px
+  height 20px
+  border-radius 50%
+  background-color red
+  color white
 </style>
