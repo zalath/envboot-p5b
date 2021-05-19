@@ -1,12 +1,16 @@
 <template>
   <div class="menubarbox" :style="style" @click='handle()'>
-    <div class="menubarscale">
-      <div class="menubarshadow msred" :style="shadowdstyle"></div>
+    <transition name="menubarbox">
+    <div class="menubarscale" v-if="is">
+      <div class="menubarshadow msred" :style="redstyle"></div>
       <div class="menubarshadow msblack" :style="shadowstyle"></div>
       <div :class="barclass+' menubar'" :style="barstyle">{{ m.name }}</div>
+      <!-- -{{order}}/{{num}}《{{tangle}}。{{td}}。 -->
     </div>
+    </transition>
   </div>
 </template>
+
 <script>
 export default {
   name: 'menubar',
@@ -21,10 +25,13 @@ export default {
     return {
       style: '',
       shadowstyle: '',
-      shadowdstyle: '',
+      redstyle: '',
       barstyle: '',
       barclass: '',
-      myorder: 0
+      myorder: 0,
+      tangle: 0,
+      td: 0,
+      is: false
     }
   },
   methods: {
@@ -40,65 +47,94 @@ export default {
       this.style = '';
       var H2 = document.documentElement.clientHeight / 2
       var W2 = document.documentElement.clientWidth / 2
-      var angleval = Math.floor(360 / this.num) * this.order
+      var r = 1
+      var d = Math.floor(360 / this.num)
+      var angleval = d * this.order
+      this.tangle = angleval
       var angle = Math.PI * angleval / 180
-      var y = Math.sin(angle)
-      var x = Math.cos(angle)
-      var rst = Math.random() * 100
+      var y = r * Math.sin(angle)
+      var x = r * Math.cos(angle)
       if (x > 0) {
-        this.formright(W2, x, rst)
+        this.right(W2, x)
       } else {
-        this.formleft(W2, x, rst)
-      }
-      var pre = -1
-      if ((angleval > 90 && angleval < 180) || (angleval > 270 && angleval < 360)) {
-        pre = 1
+        this.left(W2, x)
       }
       var ypre = 1
       if ((angleval > 0 && angleval < 180)) {
         ypre = -1
       }
       this.style += ' top:' + (H2 - (ypre + 40) * y) + 'px;'
-      while (angleval >= 90) {
-        angleval = angleval - 90
-      }
-      this.style += 'transform:rotate(' + pre * angleval / 2 + 'deg);'
-      var ry = (20 + 10 * Math.random()) * (2 - Math.random() * 4)
-      var rx = (20 + 10 * Math.random()) * (2.5 - Math.random() * 5)
-      this.shadowstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg) perspective(50px);'
-      ry = (10 + 10 * Math.random()) * (2 - Math.random() * 4)
-      rx = (10 + 40 * Math.random()) * (2 - Math.random() * 4)
-      this.shadowdstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg) perspective(50px);'
-      var rw = Math.random() * 100 + 200
-      this.shadowdstyle += 'background-color:red;width:' + rw + 'px;position:absolute;top:0px;'
+      this.topNangle(angleval)
+      this.shadow()
     },
-    formleft(W2, x, rst) {
+    shadow() {
+      var c = 1 - Math.random() * 2
+      var ry = 10 + 60 * c
+      var rx = 10 + 60 * (c / Math.abs(c) * (1 - Math.abs(c)))
+      this.shadowstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg);';
+      c = 1 - Math.random() * 2
+      ry = 10 + 60 * c
+      rx = 60 + 20 * (c / Math.abs(c) * (1 - Math.abs(c)))
+      this.redstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg);';
+      this.redstyle += 'background-color:red;width:' + (200 + 100 * Math.random()) + 'px;position:absolute;top:5px;height:30px;';
+    },
+    left(W2, x) {
       this.style += 'right:' + (W2 + Math.abs(x) + 20) + 'px;transform-origin:right;'
-      this.barclass = 'menubarleft'
-      this.shadowstyle += 'clip-path: polygon(0 0, 70% 0, 100% ' + rst + '%, 40% 100%,0% 100%);'
+      this.barclass = 'menubarleft';
       this.shadowstyle += 'right:0px;'
-      this.shadowdstyle += 'right:0px;'
+      var pin = 100 * Math.random()
+      this.shadowstyle += 'clip-path:polygon(0 0, 100% ' + pin + '%, 0 100%);'
+      this.redstyle += 'right:0px;'
+      this.redstyle += 'clip-path:polygon(0 0, 100% ' + pin + '%, 0 100%);'
     },
-    formright(W2, x, rst) {
+    right(W2, x) {
       this.style += 'left:' + (W2 + Math.abs(x) + 20) + 'px;transform-origin:left;'
-      this.barclass = 'menubarright'
-      this.shadowstyle += ''
-      this.shadowstyle += 'clip-path: polygon(0 ' + rst + '%, 30% 0, 100% 0, 100% 100%,40% 100%);'
+      this.barclass = 'menubarright';
+      var pin = 100 * Math.random()
+      this.shadowstyle += 'clip-path:polygon(0 ' + pin + '%, 100% 0, 100% 100%);'
+      this.redstyle += 'clip-path:polygon(0 ' + pin + '%, 100% 0, 100% 100%);'
+    },
+    topNangle(angleval) {
+      if (angleval <= 90) {
+        angleval = -angleval
+      }
+      if (angleval > 90 && angleval <= 180) {
+        angleval = 180 - angleval
+      }
+      if (angleval > 180 && angleval <= 270) {
+        angleval = 270 - angleval - 90
+      }
+      if (angleval > 270 && angleval <= 360) {
+        angleval = 90 - (angleval - 270)
+      }
+      this.style += 'transform:rotateZ(' + angleval + 'deg) rotateY(' + (20 + 10 * Math.random()) + 'deg);'
+    },
+    setis(e) {
+      this.is = e
     }
   },
   created() {
     this.getposition()
+    this.$bus.on('menubar', this.setis)
   },
   watch: {
     winh2: function(newval, oldval) {
-      this.getposition()
+      this.getposition();
     },
     winw2: function(newval, oldval) {
-      this.getposition()
+      this.getposition();
     }
   }
 };
 </script>
+<style scoped>
+.menubarbox-enter-active{
+  animation: shake .5s
+}
+.menubarbox-leave-active{
+  animation: shake .5s reverse
+}
+</style>
 <style scoped lang="stylus">
 .menubarbox
   font-size 40px
@@ -107,6 +143,7 @@ export default {
   cursor pointer
   &:hover
     .msblack
+      border 2px solid white
     .menubar
       color red
 .menubar
@@ -122,14 +159,16 @@ export default {
   height 40px
   background-color black
 .menubarleft
-  text-shadow:1px 0px #111,
-              -1px 0px #111,
-              -2px 0px #111
+  text-shadow:3px 3px #111,
+              -3px -3px #111,
+              -3px 3px #111,
+              3px -3px #111
   padding-left 20px
 .menubarright
-  text-shadow -1px 0px #111,
-              1px 0px #111,
-              2px 0px #111
+  text-shadow 3px 3px #111,
+              -3px -3px #111,
+              3px -3px #111,
+              -3px 3px #111
   padding-right 20px
   right 0px
 @font-face
@@ -137,6 +176,10 @@ export default {
   src url(../../../src/assets/berlin.ttf)
 @keyframes shake {
   0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 </style>

@@ -1,21 +1,20 @@
 <template>
-  <div>
-    <!-- <div>
-      <a class='fa fa-times' style='color:red' @click="close()"></a>  |
-      <a class='fa fa-times' @click="closewin()"></a>
-    </div> -->
+  <div class="mainwin" @mouseenter="enterd()" @mouseout="outd()">
+    <div class="ab top left bottom right"></div>
     <div class="main">
       <div class="menu">
-        <div class="center">
-          <menubar v-for="(m,ind) in menu" :m='m' :num='menu.length' :order='ind' :winh2='win.H2' :winw2='win.W2' :key='ind'></menubar>
+        <div class="space">
+          <menubar v-for="(m,ind) in menulist" :m='m' :num='menulist.length' :order='ind' :winh2='win.H2' :winw2='win.W2' :key='ind'></menubar>
         </div>
       </div>
     </div>
-    <div class="movebox" :style="moveboxstyle"></div>
-    <div class="closebtn" :style="closebtnstyle">
+    <div class="funcbtn movebox" :style="moveboxstyle"></div>
+    <div class="funcbtn closebtn" :style="closebtnstyle">
       <a class='fa fa-times' @click="close()"></a>
     </div>
-    {{testval}}
+    <div class="funcbtn refreshbtn" :style="refreshbtnstyle">
+      <a class='fa fa-refresh' @click="refresh()"></a>
+    </div>
     <div class="borderbox top left bordert borderl"></div>
     <div class="borderbox bottom left borderb borderl"></div>
     <div class="borderbox top right bordert borderr"></div>
@@ -45,14 +44,20 @@ export default {
         }, {
           name: 'conf',
           cmd: 'confpage'
+        },
+        {
+          name: 'tool',
+          cmd: 'toolpage'
         }
       ],
       moveboxstyle: '',
+      closebtnstyle: '',
+      refreshbtnstyle: '',
+      menulist: [],
       win: {
         H2: '',
         W2: ''
-      },
-      testval: 0
+      }
     }
   },
   methods: {
@@ -68,18 +73,30 @@ export default {
       // this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + (this.win.H2 - 15) + 'px;'
       this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + this.win.H2 + 'px;'
       this.closebtnstyle = 'left:' + (this.win.W2 - 10) + 'px;top:' + (this.win.H2 + 40) + 'px;'
+      this.refreshbtnstyle = 'left:' + (this.win.W2 - 10) + 'px;top:' + (this.win.H2 - 30) + 'px;'
+    },
+    refresh() {
+      this.menulist = []
+      this.$ipc.send('initd')
+      this.$ipc.on('inid', (event, e) => {
+        this.menulist = this.menulist.concat(this.menu)
+        this.menulist = this.menu.concat(e.menu)
+        this.resizewin()
+      })
+      this.$ipc.on('ss', function (event, e) {
+        alert(e);
+        console.log(e)
+      })
+    },
+    enterd() {
+      this.$bus.emit('menubar', true);
+    },
+    outd() {
+      this.$bus.emit('menubar', false);
     }
   },
   created() {
-    this.$ipc.send('initd');
-    this.$ipc.on('inid', (event, e) => {
-      this.menu = this.menu.concat(e.menu);
-      this.resizewin()
-    })
-    this.$ipc.on('ss', function (event, e) {
-      alert(e);
-      console.log(e)
-    })
+    this.refresh()
   },
   mounted() {
     const that = this
@@ -102,6 +119,9 @@ export default {
   width 30px
   height 30px
   position absolute
+.space
+  transform-style preserve-3d
+  transform perspective(500px)
 .bordert
   border-top solid 5px red
 .borderl
@@ -110,18 +130,18 @@ export default {
   border-right solid 5px red
 .borderb
   border-bottom solid 5px red
-.movebox
-  position absolute
-  width 30px
-  height 30px
-  background-color red
-  -webkit-app-region drag
-  border-radius 50%
-.closebtn
-  position absolute
+.funcbtn
+  cursor pointer
   width 20px
   height 20px
+  position absolute
   border-radius 50%
   background-color red
   color white
+.movebox
+  width 30px
+  height 30px
+  -webkit-app-region drag
+.ab
+ position absolute
 </style>
