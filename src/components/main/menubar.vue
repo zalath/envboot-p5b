@@ -1,16 +1,14 @@
 <template>
   <div class="menubarbox" :style="style" @click='handle()'>
-    <transition name="menubarbox">
+    <transition :name="barboxname">
     <div class="menubarscale" v-if="is">
       <div class="menubarshadow msred" :style="redstyle"></div>
       <div class="menubarshadow msblack" :style="shadowstyle"></div>
       <div :class="barclass+' menubar'" :style="barstyle">{{ m.name }}</div>
-      <!-- -{{order}}/{{num}}《{{tangle}}。{{td}}。 -->
     </div>
     </transition>
   </div>
 </template>
-
 <script>
 export default {
   name: 'menubar',
@@ -28,10 +26,11 @@ export default {
       redstyle: '',
       barstyle: '',
       barclass: '',
+      barboxname: '',
       myorder: 0,
       tangle: 0,
       td: 0,
-      is: false
+      is: true
     }
   },
   methods: {
@@ -86,6 +85,7 @@ export default {
       this.shadowstyle += 'clip-path:polygon(0 0, 100% ' + pin + '%, 0 100%);'
       this.redstyle += 'right:0px;'
       this.redstyle += 'clip-path:polygon(0 0, 100% ' + pin + '%, 0 100%);'
+      this.barboxname = 'barboxr';
     },
     right(W2, x) {
       this.style += 'left:' + (W2 + Math.abs(x) + 20) + 'px;transform-origin:left;'
@@ -93,6 +93,7 @@ export default {
       var pin = 100 * Math.random()
       this.shadowstyle += 'clip-path:polygon(0 ' + pin + '%, 100% 0, 100% 100%);'
       this.redstyle += 'clip-path:polygon(0 ' + pin + '%, 100% 0, 100% 100%);'
+      this.barboxname = 'barboxl';
     },
     topNangle(angleval) {
       if (angleval <= 90) {
@@ -128,11 +129,37 @@ export default {
 };
 </script>
 <style scoped>
-.menubarbox-enter-active{
-  animation: shake .5s
+.barboxl-enter-active {
+  animation: barboxl .1s;
 }
-.menubarbox-leave-active{
-  animation: shake .5s reverse
+.barboxl-leave-active {
+  animation: barboxl .1s reverse;
+}
+@keyframes barboxl {
+  0% {
+    transform-origin: left;
+    transform: scale(0);
+  }
+  100% {
+    transform-origin: left;
+    transform: scale(1);
+  }
+}
+.barboxr-enter-active {
+  animation: barboxr .1s;
+}
+.barboxr-leave-active {
+  animation: barboxr .1s reverse;
+}
+@keyframes barboxr {
+  0% {
+    transform-origin: right;
+    transform: scale(0);
+  }
+  100% {
+    transform-origin: right;
+    transform: scale(1);
+  }
 }
 </style>
 <style scoped lang="stylus">
@@ -174,12 +201,4 @@ export default {
 @font-face
   font-family berlin
   src url(../../../src/assets/berlin.ttf)
-@keyframes shake {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
 </style>

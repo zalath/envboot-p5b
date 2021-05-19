@@ -3,12 +3,12 @@
 import { shell, app, protocol, BrowserWindow, session, Menu, globalShortcut, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
-import conf from './com/js/api/conf.js'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const ipc = ipcMain
 const init = require('./com/js/api/init.js')
 const task = require('./com/js/api/task.js')
 const starter = require('./com/js/api/starter.js')
+const conf = require('./com/js/api/conf.js')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -53,7 +53,7 @@ async function createWindow() {
   createMenu()
 }
 function createMenu() {
-  // darwin表示macOS，针对macOS的设置
+  // darwin表示macOS，针对macOS的设�?
   if (process.platform === 'darwin') {
     const template = [
       {

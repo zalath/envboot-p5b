@@ -1,24 +1,25 @@
 <template>
-  <div class="mainwin" @mouseenter="enterd()" @mouseout="outd()">
-    <div class="ab top left bottom right"></div>
-    <div class="main">
-      <div class="menu">
-        <div class="space">
-          <menubar v-for="(m,ind) in menulist" :m='m' :num='menulist.length' :order='ind' :winh2='win.H2' :winw2='win.W2' :key='ind'></menubar>
+  <div class="mainwin">
+    <div class="ab top left bottom right" @mouseenter="enterd()" @mouseleave="outd()">
+      <div class="main">
+        <div class="menu">
+          <div class="space">
+            <menubar v-for="(m,ind) in menulist" :m='m' :num='menulist.length' :order='ind' :winh2='win.H2' :winw2='win.W2' :key='ind'></menubar>
+          </div>
         </div>
       </div>
+      <div class="funcbtn movebox" :style="moveboxstyle"></div>
+      <div class="funcbtn closebtn" :style="closebtnstyle">
+        <a class='fa fa-times' @click="close()"></a>
+      </div>
+      <div class="funcbtn refreshbtn" :style="refreshbtnstyle">
+        <a class='fa fa-refresh' @click="refresh()"></a>
+      </div>
+      <div class="borderbox top left bordert borderl"></div>
+      <div class="borderbox bottom left borderb borderl"></div>
+      <div class="borderbox top right bordert borderr"></div>
+      <div class="borderbox bottom right borderb borderr"></div>
     </div>
-    <div class="funcbtn movebox" :style="moveboxstyle"></div>
-    <div class="funcbtn closebtn" :style="closebtnstyle">
-      <a class='fa fa-times' @click="close()"></a>
-    </div>
-    <div class="funcbtn refreshbtn" :style="refreshbtnstyle">
-      <a class='fa fa-refresh' @click="refresh()"></a>
-    </div>
-    <div class="borderbox top left bordert borderl"></div>
-    <div class="borderbox bottom left borderb borderl"></div>
-    <div class="borderbox top right bordert borderr"></div>
-    <div class="borderbox bottom right borderb borderr"></div>
   </div>
 </template>
 
@@ -89,6 +90,7 @@ export default {
       })
     },
     enterd() {
+      this.refresh()
       this.$bus.emit('menubar', true);
     },
     outd() {
