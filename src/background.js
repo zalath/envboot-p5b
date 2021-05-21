@@ -9,6 +9,7 @@ const init = require('./com/js/api/init.js')
 const task = require('./com/js/api/task.js')
 const starter = require('./com/js/api/starter.js')
 const conf = require('./com/js/api/conf.js')
+const tool = require('./com/js/api/tool.js')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -41,6 +42,7 @@ async function createWindow() {
   starter.listen(ipc)
   task.listen(ipc)
   conf.listen(ipc)
+  tool.listen(ipc)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -53,7 +55,7 @@ async function createWindow() {
   createMenu()
 }
 function createMenu() {
-  // darwin表示macOS，针对macOS的设�?
+  // darwin表示macOS，针对macOS的设�?
   if (process.platform === 'darwin') {
     const template = [
       {

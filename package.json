@@ -15,7 +15,9 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@soerenmartius/vue3-clipboard": "^0.1.2",
     "axios": "^0.21.1",
+    "clipboard": "^2.0.8",
     "core-js": "^3.6.5",
     "font-awesome": "^4.7.0",
     "mitt": "^2.1.0",

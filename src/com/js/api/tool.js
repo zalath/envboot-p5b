@@ -1,9 +1,9 @@
 'use strict'
 const { BrowserWindow } = require("electron")
 const winURL = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : `file://${__dirname}/index.html`
-class conf {}
+class tool {}
 var cwin = null
-conf.init = function(ipc) {
+tool.init = function(ipc) {
     console.log('init tool page')
     var starterwin = new BrowserWindow({
         width: 800,
@@ -22,7 +22,7 @@ conf.init = function(ipc) {
     starterwin.on('close', function() {
         cwin = null
     })
-    // if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
+    if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
     ipc.once('confclose',function(event){
         try {
             starterwin.close()
@@ -31,13 +31,13 @@ conf.init = function(ipc) {
         }
     })
 }
-conf.listen = function(ipc) {
+tool.listen = function(ipc) {
     ipc.on('toolpage',function(event){
         if(cwin !== null){
             cwin.show();
         } else {
-            conf.init(ipc)
+            tool.init(ipc)
         }
     })
 }
-module.exports = conf
+module.exports = tool
