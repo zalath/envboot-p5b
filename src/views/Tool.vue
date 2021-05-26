@@ -10,18 +10,15 @@
         <h1>TIME</h1>
         <div>
           {{timestamps}}
-          <a title='copy' :data-clipboard-text='timestamps' class='timestamps fa fa-copy' @click="copy('timestamps')"></a>
           <br/>
           {{timestamp}}
-          <a title='copy' :data-clipboard-text='timestamp' class='timestamp fa fa-copy' @click="copy('timestamp')"></a>
           <br/>
           {{dateval}}
-          <a title='copy' :data-clipboard-text='dateval' class='dateval fa fa-copy' @click="copy('dateval')"></a>
           <br/>
           <input class="wNine" v-model="dateval" /><br/>
-          <a title='refresh' :data-clipboard-text='dateval' class='dateval fa fa-refresh' @click="settime()"></a>
-          <br/>
           <a title='convert' class='fa fa-calendar-check-o' @click="convert()"></a>
+          <br/>
+          <a title='refresh' class='fa fa-refresh' @click="settime()"></a>
         </div>
         <h1>JSON</h1>
         <div v-if='!jsonpage'>
@@ -40,8 +37,7 @@
 </template>
 
 <script>
-import Cb from 'clipboard'
-import { reactive } from 'vue'
+// import Cb from 'clipboard'
 export default {
   name: 'Tool',
   components: {
@@ -51,14 +47,13 @@ export default {
       dateval: '',
       timestamp: '',
       timestamps: '',
-      jsonstr: '{"1":"3","2":{"3":"4"}}',
+      jsonstr: '',
       jsonstrd: '',
       jsonpage: false
     }
   },
   created: function() {
     this.settime()
-    this.jsonviewd = reactive(this.jsonstr)
   },
   methods: {
     settime: function() {
@@ -69,6 +64,9 @@ export default {
     convert: function() {
       this.timestamp = Date.parse(this.dateval)
       this.timestamps = Date.parse(this.dateval) / 1000
+      if (isNaN(this.timestamp)) {
+        this.timestamps = Date(this.dateval)
+      }
     },
     jsonconvert: function() {
       this.jsonstrd = JSON.parse(this.jsonstr)
@@ -76,9 +74,9 @@ export default {
       this.jsonpage = true
     },
     copy: function(cls) {
-      var clipboard = new Cb('.' + cls)
-      clipboard.on('success', (e) => {
-      })
+      // var clipboard = new Cb('.' + cls)
+      // clipboard.on('success', (e) => {
+      // })
     },
     close: function() {
       this.$ipc.send('confclose');
