@@ -22,7 +22,7 @@ tool.init = function(ipc) {
     starterwin.on('close', function() {
         cwin = null
     })
-    if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
+    // if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
     ipc.once('confclose',function(event){
         try {
             starterwin.close()

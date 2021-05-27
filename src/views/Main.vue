@@ -8,18 +8,21 @@
           </div>
         </div>
       </div>
-      <div class="funcbtn movebox" :style="moveboxstyle"></div>
+      <div class="funcbtn movebox" :style="moveboxstyle">
+      </div>
       <div class="funcbtn closebtn" :style="closebtnstyle">
         <a class='fa fa-times' @click="close()"></a>
       </div>
       <div class="funcbtn refreshbtn" :style="refreshbtnstyle">
         <a class='fa fa-refresh' @click="refresh()"></a>
       </div>
-      <div class="borderbox top left bordert borderl"></div>
-      <div class="borderbox bottom left borderb borderl"></div>
-      <div class="borderbox top right bordert borderr"></div>
-      <div class="borderbox bottom right borderb borderr"></div>
+      <div class="borderbox movebox top left bordert borderl"></div>
+      <div class="borderbox movebox bottom left borderb borderl"></div>
+      <div class="borderbox movebox top right bordert borderr"></div>
+      <div class="borderbox movebox bottom right borderb borderr"></div>
     </div>
+    <div id="cpu"></div>
+    <div id="mem"></div>
   </div>
 </template>
 
@@ -71,7 +74,6 @@ export default {
     resizewin() {
       this.win.H2 = document.documentElement.clientHeight / 2
       this.win.W2 = document.documentElement.clientWidth / 2
-      // this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + (this.win.H2 - 15) + 'px;'
       this.moveboxstyle = 'left:' + (this.win.W2 - 15) + 'px;top:' + this.win.H2 + 'px;'
       this.closebtnstyle = 'left:' + (this.win.W2 - 10) + 'px;top:' + (this.win.H2 + 40) + 'px;'
       this.refreshbtnstyle = 'left:' + (this.win.W2 - 10) + 'px;top:' + (this.win.H2 - 30) + 'px;'
@@ -95,6 +97,80 @@ export default {
     },
     outd() {
       this.$bus.emit('menubar', false);
+    },
+    paintchart() {
+      var wathchpoint = 30
+      var cpuChart = this.$root.echarts.init(document.getElementById('cpu'));
+      this.initchart(cpuChart, 'cpu')
+      var cpuT = []
+      var cpuR = []
+      this.$ipc.on('addcpudata', function(event, data) {
+        if (cpuT.length > wathchpoint) {
+          cpuT.shift()
+          cpuR.shift()
+        }
+        var date = new Date();
+        cpuT.push([date.getHours(), date.getMinutes(), date.getSeconds()].join(':'))
+        cpuR.push(data)
+        cpuChart.setOption({
+          xAxis: {
+            data: cpuT
+          },
+          series: [{
+            name: 'usage',
+            data: cpuR
+          }]
+        })
+      })
+      var memChart = this.$root.echarts.init(document.getElementById('mem'));
+      this.initchart(memChart, 'mem')
+      var memT = []
+      var memR = []
+      this.$ipc.on('addmemdata', function(event, data) {
+        if (memT.length > wathchpoint) {
+          memT.shift()
+          memR.shift()
+        }
+        var date = new Date();
+        memT.push([date.getHours(), date.getMinutes(), date.getSeconds()].join(':'))
+        memR.push(data)
+        memChart.setOption({
+          xAxis: {
+            data: memT
+          },
+          series: [{
+            name: 'usage',
+            data: memR
+          }]
+        })
+      })
+    },
+    initchart(obj, id) {
+      obj.setOption({
+        title: {
+          text: id
+        },
+        xAxis: {
+          data: [],
+          boundaryGap: false
+        },
+        yAxis: {
+          min: 0,
+          max: 100,
+          offset: -20
+        },
+        series: [{
+          name: 'usage',
+          type: 'line',
+          data: [],
+          areaStyle: {
+            color: 'red'
+          },
+          lineStyle: {
+            color: 'black'
+          }
+        }]
+      });
     }
   },
   created() {
@@ -105,6 +181,7 @@ export default {
     window.onresize = function() {
       that.resizewin()
     }
+    this.paintchart()
   }
 };
 </script>

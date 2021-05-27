@@ -10,6 +10,8 @@ const task = require('./com/js/api/task.js')
 const starter = require('./com/js/api/starter.js')
 const conf = require('./com/js/api/conf.js')
 const tool = require('./com/js/api/tool.js')
+const cpu = require('cpu-stat')
+const os = require('os')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -21,16 +23,16 @@ var mainwin;
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 1800,
+    width: 900,
     height: 900,
-    // transparent: true,
+    transparent: true,
     frame: false,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false,
-      devTools: true,
+      // devTools: true,
       nodeIntegration: true,
       enableRemoteModule: true,
       contextIsolation: false
@@ -124,5 +126,18 @@ if (isDevelopment) {
     process.on('SIGTERM', () => {
       app.quit()
     })
+  }
+}
+
+setInterval(() => {readbit()}, 1000);
+function readbit(){
+  cpu.usagePercent(usagePercent);
+  mainwin.webContents.send('addmemdata',(os.totalmem()-os.freemem())*100/os.totalmem())
+  // read disk usage
+  // read network usage
+}
+function usagePercent(msg,rate,diffsecond){
+  if(msg == null){
+    mainwin.webContents.send('addcpudata',rate);
   }
 }
