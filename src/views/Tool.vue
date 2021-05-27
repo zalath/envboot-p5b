@@ -7,13 +7,17 @@
     <br/>
     <div>
       <div class="tlist">
+        <input ref="inputCopy" value="for copy" style="opacity:0;position:absolute" />
         <h1>TIME</h1>
         <div>
           {{timestamps}}
+          <a class="fa fa-copy" @click="copy(timestamps)"></a>
           <br/>
           {{timestamp}}
+          <a class="fa fa-copy" @click="copy(timestamp)"></a>
           <br/>
           {{dateval}}
+          <a class="fa fa-copy" @click="copy(dateval)"></a>
           <br/>
           <input class="wNine" v-model="dateval" /><br/>
           <a title='convert' class='fa fa-calendar-check-o' @click="convert()"></a>
@@ -28,6 +32,7 @@
         </div>
         <div v-if='jsonpage'>
           <a class="fa fa-times" @click="jsonpage = !jsonpage"></a>
+          <br/>
           <pre class="tl wNine ma">{{jsonstrd}}</pre>
         </div>
         <br/>
@@ -65,18 +70,18 @@ export default {
       this.timestamp = Date.parse(this.dateval)
       this.timestamps = Date.parse(this.dateval) / 1000
       if (isNaN(this.timestamp)) {
-        this.timestamps = Date(this.dateval)
+        this.timestamps = this.datefmt(new Date(this.dateval * 1000))
       }
     },
     jsonconvert: function() {
       this.jsonstrd = JSON.parse(this.jsonstr)
-      console.log(this.jsonstrd)
       this.jsonpage = true
     },
-    copy: function(cls) {
-      // var clipboard = new Cb('.' + cls)
-      // clipboard.on('success', (e) => {
-      // })
+    copy: function(text) {
+      const input = this.$refs.inputCopy
+      input.value = text
+      input.select()
+      document.execCommand('copy')
     },
     close: function() {
       this.$ipc.send('confclose');
