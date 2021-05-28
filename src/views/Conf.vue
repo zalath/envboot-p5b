@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <div class="move"></div>
-    <div class="closebtn" @click="close()">
-      <a class='fa fa-times close'></a>
-    </div>
+    <closebar :closetitle="closetitle"/>
     <br/>
     <div>
       <div class="tlist">
@@ -50,14 +47,17 @@
 </template>
 
 <script>
+import Closebar from '../components/closebar.vue'
 
 export default {
   name: 'Conf',
   components: {
+    Closebar
   },
   data: function() {
     return {
-      config: {}
+      config: {},
+      closetitle: 'confclose'
     }
   },
   created: function() {
@@ -70,9 +70,6 @@ export default {
     })
   },
   methods: {
-    close: function() {
-      this.$ipc.send('confclose');
-    },
     initstarter(e) {
       if (e !== null) {
         this.config = e

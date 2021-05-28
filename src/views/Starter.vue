@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <div class="move"></div>
-    <div class="closebtn" @click="close()">
-      <a class='fa fa-times close'></a>
-    </div>
+    <closebar :closetitle='closetitle'/>
     <br/>
     <div>
       <div class="tlist">
@@ -14,15 +11,18 @@
 </template>
 
 <script>
+import Closebar from '../components/closebar.vue'
 import stLine from '../components/starter/line'
 export default {
   name: 'App',
   components: {
-    stLine
+    stLine,
+    Closebar
   },
   data: function() {
     return {
-      stList: []
+      stList: [],
+      closetitle: 'starterclose'
     }
   },
   created: function() {
@@ -32,9 +32,6 @@ export default {
     this.$ipc.send('starterdata')
   },
   methods: {
-    close: function() {
-      this.$ipc.send('starterclose');
-    },
     initstarter(e) {
       if (e !== null) {
         this.stList = e.starter

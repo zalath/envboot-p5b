@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <div class="move"></div>
-    <div class="closebtn" @click="close()">
-      <a class='fa fa-times close'></a>
-    </div>
+    <closebar :closetitle="closetitle" />
     <br/>
     <div>
       <div class="tlist">
@@ -17,15 +14,17 @@
 <script>
 import win from '../components/task/win'
 import edit from '../components/task/edit'
+import Closebar from '../components/closebar.vue';
 export default {
   name: 'App',
   components: {
     win,
-    edit
+    edit,
+    Closebar
   },
-  methods: {
-    close: function() {
-      this.$ipc.send('taskclose');
+  data: function() {
+    return {
+      closetitle: 'taskclose'
     }
   }
 }

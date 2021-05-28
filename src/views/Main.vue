@@ -21,8 +21,6 @@
       <div class="borderbox movebox top right bordert borderr"></div>
       <div class="borderbox movebox bottom right borderb borderr"></div>
     </div>
-    <div id="cpu"></div>
-    <div id="mem"></div>
   </div>
 </template>
 
@@ -52,6 +50,10 @@ export default {
         {
           name: 'tool',
           cmd: 'toolpage'
+        },
+        {
+          name: 'watcher',
+          cmd: 'watcherpage'
         }
       ],
       moveboxstyle: '',
@@ -97,80 +99,6 @@ export default {
     },
     outd() {
       this.$bus.emit('menubar', false);
-    },
-    paintchart() {
-      var wathchpoint = 30
-      var cpuChart = this.$root.echarts.init(document.getElementById('cpu'));
-      this.initchart(cpuChart, 'cpu')
-      var cpuT = []
-      var cpuR = []
-      this.$ipc.on('addcpudata', function(event, data) {
-        if (cpuT.length > wathchpoint) {
-          cpuT.shift()
-          cpuR.shift()
-        }
-        var date = new Date();
-        cpuT.push([date.getHours(), date.getMinutes(), date.getSeconds()].join(':'))
-        cpuR.push(data)
-        cpuChart.setOption({
-          xAxis: {
-            data: cpuT
-          },
-          series: [{
-            name: 'usage',
-            data: cpuR
-          }]
-        })
-      })
-      var memChart = this.$root.echarts.init(document.getElementById('mem'));
-      this.initchart(memChart, 'mem')
-      var memT = []
-      var memR = []
-      this.$ipc.on('addmemdata', function(event, data) {
-        if (memT.length > wathchpoint) {
-          memT.shift()
-          memR.shift()
-        }
-        var date = new Date();
-        memT.push([date.getHours(), date.getMinutes(), date.getSeconds()].join(':'))
-        memR.push(data)
-        memChart.setOption({
-          xAxis: {
-            data: memT
-          },
-          series: [{
-            name: 'usage',
-            data: memR
-          }]
-        })
-      })
-    },
-    initchart(obj, id) {
-      obj.setOption({
-        title: {
-          text: id
-        },
-        xAxis: {
-          data: [],
-          boundaryGap: false
-        },
-        yAxis: {
-          min: 0,
-          max: 100,
-          offset: -20
-        },
-        series: [{
-          name: 'usage',
-          type: 'line',
-          data: [],
-          areaStyle: {
-            color: 'red'
-          },
-          lineStyle: {
-            color: 'black'
-          }
-        }]
-      });
     }
   },
   created() {
@@ -181,7 +109,6 @@ export default {
     window.onresize = function() {
       that.resizewin()
     }
-    this.paintchart()
   }
 };
 </script>

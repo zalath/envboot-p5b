@@ -5,6 +5,7 @@ import Task from '../views/Task.vue'
 import Starter from '../views/Starter.vue'
 import Conf from '../views/Conf.vue'
 import Tool from '../views/Tool.vue'
+import Watcher from '../views/Watcher.vue'
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
     path: '/tool',
     name: 'tool',
     component: Tool
+  },
+  {
+    path: '/watcher',
+    name: 'watcher',
+    component: Watcher
   }
 ]
 

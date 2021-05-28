@@ -10,8 +10,7 @@ const task = require('./com/js/api/task.js')
 const starter = require('./com/js/api/starter.js')
 const conf = require('./com/js/api/conf.js')
 const tool = require('./com/js/api/tool.js')
-const cpu = require('cpu-stat')
-const os = require('os')
+const watcher = require('./com/js/api/watcher.js')
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -45,6 +44,7 @@ async function createWindow() {
   task.listen(ipc)
   conf.listen(ipc)
   tool.listen(ipc)
+  watcher.listen(ipc)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -126,18 +126,5 @@ if (isDevelopment) {
     process.on('SIGTERM', () => {
       app.quit()
     })
-  }
-}
-
-setInterval(() => {readbit()}, 1000);
-function readbit(){
-  cpu.usagePercent(usagePercent);
-  mainwin.webContents.send('addmemdata',(os.totalmem()-os.freemem())*100/os.totalmem())
-  // read disk usage
-  // read network usage
-}
-function usagePercent(msg,rate,diffsecond){
-  if(msg == null){
-    mainwin.webContents.send('addcpudata',rate);
   }
 }

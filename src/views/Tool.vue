@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <div class="move"></div>
-    <div class="closebtn" @click="close()">
-      <a class='fa fa-times close'></a>
-    </div>
+    <closebar :closetitle="closetitle" />
     <br/>
     <div>
       <div class="tlist">
@@ -42,10 +39,12 @@
 </template>
 
 <script>
+import Closebar from '../components/closebar.vue'
 // import Cb from 'clipboard'
 export default {
   name: 'Tool',
   components: {
+    Closebar
   },
   data: function() {
     return {
@@ -54,7 +53,8 @@ export default {
       timestamps: '',
       jsonstr: '',
       jsonstrd: '',
-      jsonpage: false
+      jsonpage: false,
+      closetitle: 'toolclose'
     }
   },
   created: function() {
@@ -82,9 +82,6 @@ export default {
       input.value = text
       input.select()
       document.execCommand('copy')
-    },
-    close: function() {
-      this.$ipc.send('confclose');
     },
     datefmt(date) {
       var fmt = 'yyyy-MM-dd hh:mm:ss'

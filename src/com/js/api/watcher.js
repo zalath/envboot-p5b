@@ -1,14 +1,16 @@
 'use strict'
 const { BrowserWindow } = require("electron")
 const winURL = process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : `file://${__dirname}/index.html`
-class tool {}
+const cpu = require('cpu-stat')
+const os = require('os')
+class watcher {}
 var cwin = null
-tool.init = function(ipc) {
+watcher.init = function(ipc) {
     var starterwin = new BrowserWindow({
         width: 800,
         height: 800,
         frame: false,
-        title: 'Tool',
+        title: 'Watcher',
         webPreferences: {
           webSecurity: false,
           nodeIntegration: true,
@@ -17,12 +19,12 @@ tool.init = function(ipc) {
         }
     })
     cwin = starterwin
-    starterwin.loadURL(winURL + '#/tool');
+    starterwin.loadURL(winURL + '#/watcher');
     starterwin.on('close', function() {
         cwin = null
     })
     // if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
-    ipc.once('toolclose',function(event){
+    ipc.once('watcherclose',function(event){
         try {
             starterwin.close()
         }catch(e){
@@ -30,13 +32,26 @@ tool.init = function(ipc) {
         }
     })
 }
-tool.listen = function(ipc) {
-    ipc.on('toolpage',function(event){
+watcher.listen = function(ipc) {
+    ipc.on('watcherpage',function(event){
         if(cwin !== null){
             cwin.show();
         } else {
-            tool.init(ipc)
+            watcher.init(ipc)
+            setInterval(() => {watcher.readbit()}, 1000);
         }
     })
 }
-module.exports = tool
+
+watcher.readbit = function() {
+  cpu.usagePercent(watcher.usagePercent);
+  if (cwin) cwin.webContents.send('addmemdata',(os.totalmem()-os.freemem())*100/os.totalmem())
+  // read disk usage
+  // read network usage
+}
+watcher.usagePercent = function (msg,rate,diffsecond) {
+  if(msg == null){
+      if (cwin) cwin.webContents.send('addcpudata',rate);
+  }
+}
+module.exports = watcher
