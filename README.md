@@ -24,8 +24,8 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## tasklist
-- simple mode   âˆš
-- seperated task window   âˆš
+- simple mode   âˆ?
+- seperated task window   âˆ?
 
 ## booting
 - provide selection for objects being boot
@@ -67,3 +67,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
     - encode/decode
 - md5
     - encode
+    
