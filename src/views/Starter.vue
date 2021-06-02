@@ -22,7 +22,8 @@ export default {
   data: function() {
     return {
       stList: [],
-      closetitle: 'starterclose'
+      closetitle: 'starterclose',
+      stlLeft: 0
     }
   },
   created: function() {
@@ -36,7 +37,6 @@ export default {
       if (e !== null) {
         this.stList = e.starter
       }
-      console.log(e)
     }
   }
 }
@@ -62,4 +62,12 @@ export default {
   -webkit-app-region no-drag
 .close
   color red
+#app
+  position absolute
+  background-color lightgray
+  bottom 0px
+  left 0px
+  top 0px
+  right 0px
+  overflow auto
 </style>
