@@ -23,20 +23,20 @@ export default {
 
 <style scoped lang="stylus">
 .move
-    height 30px
-    width 100%
-    background-color red
-    -webkit-app-region drag
-    position fixed
+  height 30px
+  width 100%
+  background-color red
+  -webkit-app-region drag
+  position fixed
 .closebtn
-    position fixed
-    right 0px
-    background-color black
-    width 30px
-    height  30px
-    font-size 25px
-    line-height 30px
-    -webkit-app-region no-drag
+  position fixed
+  right 0px
+  background-color black
+  width 30px
+  height  30px
+  font-size 25px
+  line-height 30px
+  -webkit-app-region no-drag
 .close
-    color red
+  color red
 </style>

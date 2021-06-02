@@ -34,32 +34,33 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - prvide 'left click and right click' tips
 
 ## watching
-- cpu and ram usage
+- cpu and ram usage √
 
 ## mainmenu
-- boot
+- boot  √
 - tasklist
     - display countings for new/ing/end
-- starter
-- always display the watch
-- pm & tm
-- close btn
+- starter   √
+- watch  √
+- pm & tm   √
+- close btn √
 
 ## effect
-- mouse move through
+- mouse move through    √
 - provide 'always on the top of the screen' switch
 
 ## config page
-- seperated window to alter configuration
+- seperated window to alter configuration   √
 - what if config file is broken
-
+- sort
+- empty line
 
 ## other functions
-- bejson tool
-    - structured data outcome
-- timestamp tool
-    - current timestamp/refresh btn/copy btn
-    - date to timestamp/timestamp to date convert
+- bejson tool   √
+    - structured data outcome   √
+- timestamp tool    √
+    - current timestamp/refresh btn/copy btn    √
+    - date to timestamp/timestamp to date convert   √
     - date select
 - base64
     - endcode/decode
