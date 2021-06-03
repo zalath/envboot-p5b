@@ -24,8 +24,8 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## tasklist
-- simple mode   �?
-- seperated task window   �?
+- simple mode   �?
+- seperated task window   �?
 
 ## booting
 - provide selection for objects being boot
@@ -57,14 +57,16 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ## other functions
 - bejson tool   √
     - structured data outcome   √
+    - un-unicode
+    - un escape characters
 - timestamp tool    √
     - current timestamp/refresh btn/copy btn    √
     - date to timestamp/timestamp to date convert   √
     - date select
 - base64
-    - endcode/decode
+    - endcode/decode    √
 - url
-    - encode/decode
+    - encode/decode √
 - md5
-    - encode
+    - encode    √
     

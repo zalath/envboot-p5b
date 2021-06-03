@@ -34,8 +34,11 @@
           </div>
           <h1>url</h1>
           <div>
-            <input :value="deurlval" @change="url()" />
-            <input :value="urlval" @change="deurl()" />
+            <input v-model="deurlval"/>
+            <a class="fa fa-cog" @click="url()"></a>
+            <br/>
+            <input v-model="urlval"/>
+            <a class="fa fa-cog" @click="deurl()"></a>
           </div>
           <h1>md5</h1>
           <div>
@@ -53,7 +56,7 @@
           <textarea rows="15" class="wNine" v-model='jsonstr' />
         </div>
         <div v-if='jsonpage'>
-          <a class="fa fa-times" @click="jsonpage = !jsonpage"></a>
+          <a class="fa fa-times" @click="jsonpage = !jsonpage;jsonstr = ''"></a>
           <br/>
           <pre class="tl wNine ma">{{jsonstrd}}</pre>
         </div>
@@ -135,10 +138,10 @@ export default {
       return fmt;
     },
     base64: function() {
-      this.debase64val = base64.encode(this.base64val)
+      this.base64val = base64.encode(this.debase64val)
     },
     debase64: function() {
-      this.base64val = base64.decode(this.debase64val)
+      this.debase64val = base64.decode(this.base64val)
     },
     url: function() {
       this.urlval = encodeURIComponent(this.deurlval)
