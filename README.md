@@ -31,7 +31,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - provide selection for objects being boot
 
 ## starter
-- prvide 'left click and right click' tips
+- prvide 'left click and right click' tips  √
 
 ## watching
 - cpu and ram usage √
@@ -47,7 +47,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## effect
 - mouse move through    √
-- provide 'always on the top of the screen' switch
 
 ## config page
 - seperated window to alter configuration   √

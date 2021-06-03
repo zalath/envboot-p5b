@@ -24,7 +24,7 @@ starter.init = function(ipc) {
     starterwin.on('close', function() {
         swin = null
     })
-    if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
+    // if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
     ipc.once('starterclose',function(event){
         try {
             starterwin.close()

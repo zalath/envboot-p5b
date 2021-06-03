@@ -4,6 +4,7 @@
     <br/>
     <div>
       <div class="tlist">
+        <stLine :line="{'name':'Lb:editor / Rb:folder','path':''}"></stLine>
         <stLine v-for="(line,ind) in stList" :line="line" :key="ind"></stLine>
       </div>
     </div>
