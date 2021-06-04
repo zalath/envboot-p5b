@@ -7,6 +7,7 @@ tool.init = function(ipc) {
     var starterwin = new BrowserWindow({
         width: 800,
         height: 800,
+        transparent: true,
         frame: false,
         title: 'Tool',
         webPreferences: {
@@ -21,7 +22,7 @@ tool.init = function(ipc) {
     starterwin.on('close', function() {
         cwin = null
     })
-    if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
+    // if (!process.env.IS_TEST)starterwin.webContents.openDevTools();
     ipc.once('toolclose',function(event){
         try {
             starterwin.close()

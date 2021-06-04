@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <closebar :closetitle="closetitle" />
+    <triback />
     <br/>
-    <div>
+    <div class="toolbox">
       <input ref="inputCopy" value="for copy" style="opacity:0;position:absolute" />
       <div class="tlist">
         <div class="tbox">
@@ -68,13 +69,15 @@
 
 <script>
 import Closebar from '../components/closebar.vue'
+import Triback from '../components/triback.vue'
 import md5 from 'js-md5'
 const base64 = require('js-base64').Base64;
 // import Cb from 'clipboard'
 export default {
   name: 'Tool',
   components: {
-    Closebar
+    Closebar,
+    Triback
   },
   data: function() {
     return {
@@ -157,32 +160,16 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-.move
-  height 30px
-  width 100%
-  background-color red
-  -webkit-app-region drag
-  position fixed
-.tlist
-  margin-top 30px
-.closebtn
-  position fixed
-  right 0px
-  background-color black
-  width 30px
-  height  30px
-  font-size 25px
-  line-height 30px
-  -webkit-app-region no-drag
-.close
-  color red
-.funcbtn
-  margin-left 10px
-  cursor pointer
 .wNine
   width 90%
 .tl
   text-align left
 .ma
   margin auto
+.toolbox
+  position absolute
+  width 90%
+  height 85%
+  margin 5%
+  overflow auto
 </style>
