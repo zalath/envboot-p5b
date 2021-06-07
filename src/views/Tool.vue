@@ -18,7 +18,7 @@
             {{dateval}}
             <a class="fa fa-copy" @click="copy(dateval)"></a>
             <br/>
-            <input class="wNine" v-model="dateval" /><br/>
+            <textarea class="wNine" v-model="dateval" /><br/>
             <a title='convert' class='fa fa-calendar-check-o' @click="convert()"></a>
             <br/>
             <a title='refresh' class='fa fa-refresh' @click="settime()"></a>
@@ -27,23 +27,28 @@
         <div class="tbox">
           <h1>base64</h1>
           <div>
-            <input v-model="debase64val"/>
+            <textarea class="wNine" v-model="debase64val"/>
+            <br/>
             <a class="fa fa-cog" @click="base64()"></a>
             <br />
-            <input v-model="base64val"/>
+            <textarea class="wNine" v-model="base64val"/>
+            <br/>
             <a class="fa fa-cog" @click="debase64()"></a>
           </div>
           <h1>url</h1>
           <div>
-            <input v-model="deurlval"/>
+            <textarea class="wNine" v-model="deurlval"/>
+            <br/>
             <a class="fa fa-cog" @click="url()"></a>
             <br/>
-            <input v-model="urlval"/>
+            <textarea class="wNine" v-model="urlval"/>
+            <br/>
             <a class="fa fa-cog" @click="deurl()"></a>
           </div>
           <h1>md5</h1>
           <div>
-            <input v-model="md5str" />
+            <textarea class="wNine" v-model="md5str" />
+            <br/>
             <a class="fa fa-cog" @click="md5()"></a>
             <a class="fa fa-copy" @click="copy(md5str)"></a>
           </div>

@@ -6,19 +6,13 @@
 
       <h2>starter</h2>
       <div v-for='(s,ind) in config.starter' :key='ind'>
-        <div v-if='s != ""'>
-          <span>{{ind}}:</span>
-          <input @change='changeval($event,"starter",ind,"name")' :value='s.name'/>
-          <input @change='changeval($event,"starter",ind,"path")' :value='s.path'/>
-          <div class="fa fa-minus funcbtn" @click="del('starter',ind)"></div>
-          <div v-if="ind>0 && isCanEmtpyLine" class="fa fa-reply funcbtn" @click="emptyline(ind)"></div>
-          <i class="hidden">{{isCanEmtpyLine=true}}</i>
-        </div>
-        <div v-else>
-          <span>{{ind}}:</span>
-          <div class="fa fa-minus funcbtn" @click="del('starter',ind)"></div>
-          <i class="hidden">{{isCanEmtpyLine=false}}</i>
-        </div>
+        <span>{{ind}}:</span>
+        <input v-if='s != ""' @change='changeval($event,"starter",ind,"name")' :value='s.name'/>
+        <input v-if='s != ""' @change='changeval($event,"starter",ind,"path")' :value='s.path'/>
+        <div class="fa fa-times funcbtn" @click="del('starter',ind)"></div>
+        <!-- <div v-if="ind>0 && isCanEmtpyLine" class="fa fa-reply funcbtn" @click="emptyline(ind)"></div> -->
+        <!-- <i class="hidden">{{isCanEmtpyLine=true}}</i> -->
+        <div class="fa fa-reorder funcbtn" @click="move('starter',ind)"></div>
       </div>
       <br/>
       <div>
