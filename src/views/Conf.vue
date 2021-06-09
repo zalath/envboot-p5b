@@ -6,13 +6,13 @@
 
       <h2>starter</h2>
       <div v-for='(s,ind) in config.starter' :key='ind'>
-        <span>{{ind}}:</span>
-        <input v-if='s != ""' @change='changeval($event,"starter",ind,"name")' :value='s.name'/>
-        <input v-if='s != ""' @change='changeval($event,"starter",ind,"path")' :value='s.path'/>
-        <div class="fa fa-times funcbtn" @click="del('starter',ind)"></div>
-        <!-- <div v-if="ind>0 && isCanEmtpyLine" class="fa fa-reply funcbtn" @click="emptyline(ind)"></div> -->
-        <!-- <i class="hidden">{{isCanEmtpyLine=true}}</i> -->
-        <div class="fa fa-reorder funcbtn" @click="move('starter',ind)"></div>
+        <span v-drag="ind" class="dragbar" v-light :ind="ind">
+          <span>{{ind}}:</span>
+          <input v-if='s != ""' @change='changeval($event,"starter",ind,"name")' :value='s.name'/>
+          <input v-if='s != ""' @change='changeval($event,"starter",ind,"path")' :value='s.path'/>
+          <div class="fa fa-times funcbtn" @click="del('starter',ind)"></div>
+          <div class="fa fa-reorder funcbtn"></div>
+        </span>
       </div>
       <br/>
       <div>
@@ -60,7 +60,8 @@ export default {
     return {
       config: {},
       closetitle: 'confclose',
-      isCanEmtpyLine: false
+      moving: 0,
+      movto: 0
     }
   },
   created: function() {
@@ -71,6 +72,46 @@ export default {
     this.$ipc.on('confsaved', (event, e) => {
       alert('saved');
     })
+  },
+  directives: {
+    drag(el, binding) {
+      el.lastElementChild.onmousedown = function(e) {
+        var ev = binding.instance;
+        var disx = e.pageX - el.offsetLeft;
+        var disy = e.pageY - el.offsetTop;
+        el.style.left = e.pageX - disx - 30 + 'px'
+        el.style.top = e.pageY - disy + 'px'
+        el.style.position = 'absolute'
+        ev.movi = el.getAttribute('ind')
+        ev.movis = true
+        document.onmousemove = function (e) {
+          el.style.left = e.pageX - disx - 30 + 'px'
+          el.style.top = e.pageY - disy + 'px'
+        }
+        document.onmouseup = function() {
+          document.onmousemove = document.onmouseup = null
+          el.style.position = ''
+        }
+      }
+    },
+    light(el, binding) {
+      el.onmouseenter = function(e) {
+        if (binding.instance.movis) {
+          el.style.borderTop = 'solid 1px red'
+        }
+      }
+      el.onmouseleave = function() {
+        if (binding.instance.movis) {
+          el.style.borderTop = ''
+        }
+      }
+      el.onmouseup = function() {
+        if (binding.instance.movis) {
+          binding.instance.movto = el.getAttribute('ind')
+          binding.instance.move()
+        }
+      }
+    }
   },
   methods: {
     initstarter(e) {
@@ -116,7 +157,18 @@ export default {
       }
     },
     emptyline(i) {
-      this.config.starter.splice(i, 0, '');
+      this.config.starter.splice(i, 0, '')
+    },
+    move() {
+      if (this.movi < this.movto) {
+        this.movto -= 1
+      }
+      console.log(this.movi)
+      console.log(this.movto)
+      var c = JSON.parse(JSON.stringify(this.config.starter[this.movi]))
+      this.config.starter.splice(this.movi, 1)
+      this.config.starter.splice(this.movto, 0, c)
+      this.movis = false
     }
   }
 }
@@ -132,4 +184,6 @@ export default {
 .funcbtn
   margin-left 10px
   cursor pointer
+.movbar
+  position absolute
 </style>
