@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <closebar :closetitle="closetitle" />
+    <triback />
     <br/>
     <div>
       <div class="tlist">
@@ -14,13 +15,15 @@
 <script>
 import win from '../components/task/win'
 import edit from '../components/task/edit'
-import Closebar from '../components/closebar.vue';
+import Closebar from '../components/closebar.vue'
+import Triback from '../components/triback.vue'
 export default {
   name: 'App',
   components: {
     win,
     edit,
-    Closebar
+    Closebar,
+    Triback
   },
   data: function() {
     return {
@@ -38,7 +41,12 @@ export default {
   -webkit-app-region drag
   position fixed
 .tlist
-  margin-top 30px
+  position absolute
+  top 50px
+  left 5%
+  right 5%
+  bottom 5%
+  overflow auto
 .closebtn
   position fixed
   right 0px

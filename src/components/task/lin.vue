@@ -35,101 +35,98 @@ export default {
       isbtn: false,
       isdel: false,
       isshow: true,
-      tlin: this.lin
-    };
+      tlin: this.lin,
+      ishlight: 0
+    }
   },
   created() {
-    this.$bus.on('new' + this.tlin.id, this.donew);
-    this.$bus.on('edit' + this.tlin.id, this.doedit);
-    this.$bus.on('del' + this.tlin.id, this.dodel);
-    this.$bus.on('withtik', this.withtik);
+    this.$bus.on('new' + this.tlin.id, this.donew)
+    this.$bus.on('edit' + this.tlin.id, this.doedit)
+    this.$bus.on('del' + this.tlin.id, this.dodel)
+    this.$bus.on('withtik', this.withtik)
   },
   methods: {
     showlins() {
       if (this.tlin.ct > 0 && this.tlin.Child == null) {
-        this.getlins();
+        this.getlins()
       }
-      this.showchild = !this.showchild;
+      this.showchild = !this.showchild
     },
     refresh() {
-      this.tlin.Child = null;
-      this.getlins();
+      this.tlin.Child = null
+      this.getlins()
     },
     getlins() {
       var that = this
       req.post('list', { id: this.tlin.id }).then((res) => {
-        that.tlin.Child = res.data;
-      });
+        that.tlin.Child = res.data
+      })
     },
     tik() {
       if (this.tlin.tik === 2) {
-        this.tlin.tik = 0;
+        this.tlin.tik = 0
       } else {
-        this.tlin.tik += 1;
+        this.tlin.tik += 1
       }
-      req.post('tik', { id: this.tlin.id, tik: this.tlin.tik });
+      req.post('tik', { id: this.tlin.id, tik: this.tlin.tik })
     },
     newl() {
-      this.$bus.emit('new', { pid: this.tlin.id });
+      this.$bus.emit('new', { pid: this.tlin.id })
     },
     edit() {
-      this.$bus.emit('edit', { lin: this.tlin });
+      this.$bus.emit('edit', { lin: this.tlin })
     },
     del() {
       req.post('del', { id: this.tlin.id }).then((res) => {
         if (res.data === 'done') {
-          this.$bus.emit('del' + this.tlin.pid, this.tlin.id);
+          this.$bus.emit('del' + this.tlin.pid, this.tlin.id)
         }
-      });
+      })
     },
     donew(da) {
-      if (this.tlin.Child != null) this.tlin.Child.push(da);
-      this.tlin.ct += 1;
+      if (this.tlin.Child != null) this.tlin.Child.push(da)
+      this.tlin.ct += 1
     },
     doedit(da) {
-      this.tlin = da;
+      this.tlin = da
     },
     dodel(id) {
-      this.tlin.ct -= 1;
-      var i = this.tlin.Child.map((item) => item.id).indexOf(id);
-      this.tlin.Child.splice(i, 1);
+      this.tlin.ct -= 1
+      var i = this.tlin.Child.map((item) => item.id).indexOf(id)
+      this.tlin.Child.splice(i, 1)
     },
     showbtn() {
-      this.isbtn = true;
+      this.isbtn = true
     },
     hidebtn() {
-      this.isbtn = false;
+      this.isbtn = false
     },
     toggledel() {
-      this.isdel = !this.isdel;
+      this.isdel = !this.isdel
     },
     withtik(tik) {
       if (tik === -1) {
-        this.isshow = true;
+        this.isshow = true
       } else if (this.tlin.tik === tik) {
-        this.isshow = true;
+        this.isshow = true
       } else {
-        this.isshow = false;
+        this.isshow = false
       }
     }
   }
-};
+}
 </script>
-<style scoped>
-div {
-  text-align: left;
-  margin-left: 10px;
-  margin-top: 5px;
-}
-a {
-  text-align: left;
-  margin-left: 10px;
-}
-.cmt {
-  margin-left: 30px;
-  color: #999;
-}
-.isdel {
-  display: inline-block;
-}
+<style lang="stylus" scoped>
+div
+  text-align left
+  margin-left 10px
+  margin-top 5px
+a
+  text-align left
+  margin-left 10px
+.cmt
+  margin-left 30px
+  color #999
+.isdel
+  display inline-block
 </style>

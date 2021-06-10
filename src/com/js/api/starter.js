@@ -6,7 +6,6 @@ const exec = require('child_process').exec;
 class starter {}
 var swin = null
 starter.init = function(ipc) {
-    console.log('init starter page')
     var starterwin = new BrowserWindow({
         width: 800,
         height: 800,
