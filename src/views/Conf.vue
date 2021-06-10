@@ -1,12 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app" class="noselect">
     <closebar :closetitle="closetitle"/>
     <triback />
     <div class="tlist">
 
       <h2>starter</h2>
-      <div v-for='(s,ind) in config.starter' :key='ind'>
-        <span v-drag="ind" class="dragbar" v-light :ind="ind">
+      <div v-for='(s,ind) in config.starter' :key='ind' v-light="ind">
+        <span v-drag="ind" class="dragbar">
           <span>{{ind}}:</span>
           <input v-if='s != ""' @change='changeval($event,"starter",ind,"name")' :value='s.name'/>
           <input v-if='s != ""' @change='changeval($event,"starter",ind,"path")' :value='s.path'/>
@@ -82,7 +82,7 @@ export default {
         el.style.left = e.pageX - disx - 30 + 'px'
         el.style.top = e.pageY - disy + 'px'
         el.style.position = 'absolute'
-        ev.movi = el.getAttribute('ind')
+        ev.movi = binding.value
         ev.movis = true
         document.onmousemove = function (e) {
           el.style.left = e.pageX - disx - 30 + 'px'
@@ -107,8 +107,9 @@ export default {
       }
       el.onmouseup = function() {
         if (binding.instance.movis) {
-          binding.instance.movto = el.getAttribute('ind')
+          binding.instance.movto = binding.value
           binding.instance.move()
+          el.style.borderTop = ''
         }
       }
     }
@@ -163,8 +164,6 @@ export default {
       if (this.movi < this.movto) {
         this.movto -= 1
       }
-      console.log(this.movi)
-      console.log(this.movto)
       var c = JSON.parse(JSON.stringify(this.config.starter[this.movi]))
       this.config.starter.splice(this.movi, 1)
       this.config.starter.splice(this.movto, 0, c)
@@ -186,4 +185,6 @@ export default {
   cursor pointer
 .movbar
   position absolute
+.noselect
+  user-select none
 </style>
