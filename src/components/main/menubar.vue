@@ -1,11 +1,11 @@
 <template>
   <div class="menubarbox" :style="style" @click='handle()'>
     <transition :name="barboxname">
-    <div class="menubarscale" v-if="is">
-      <div class="menubarshadow msred" :style="redstyle"></div>
-      <div class="menubarshadow msblack" :style="shadowstyle"></div>
-      <div :class="barclass+' menubar'" :style="barstyle">{{ m.name }}</div>
-    </div>
+      <div class="menubarscale" v-if="is" @mouseenter="tohlight()" @mouseleave="nhlight()">
+        <div class="menubarshadow msred" :style="redstyle"></div>
+        <div class="menubarshadow msblack" :style="shadowstyle"></div>
+        <div :class="barclass+' menubar'" :style="barstyle">{{ m.name }}</div>
+      </div>
     </transition>
   </div>
 </template>
@@ -70,7 +70,7 @@ export default {
       var c = 1 - Math.random() * 2
       var ry = 10 + 60 * c
       var rx = 10 + 60 * (c / Math.abs(c) * (1 - Math.abs(c)))
-      this.shadowstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg);';
+      this.shadowstyle += 'transform:rotateY(' + ry + 'deg) rotateX(' + rx + 'deg);position:absolute;top:0px;height:30px';
       c = 1 - Math.random() * 2
       ry = 10 + 60 * c
       rx = 60 + 20 * (c / Math.abs(c) * (1 - Math.abs(c)))
@@ -86,6 +86,7 @@ export default {
       this.redstyle += 'right:0px;'
       this.redstyle += 'clip-path:polygon(0 0, 100% ' + pin + '%, 0 100%);'
       this.barboxname = 'barboxr';
+      this.barstyle += 'right:80px';
     },
     right(W2, x) {
       this.style += 'left:' + (W2 + Math.abs(x) + 20) + 'px;transform-origin:left;'
@@ -94,6 +95,7 @@ export default {
       this.shadowstyle += 'clip-path:polygon(0 ' + pin + '%, 100% 0, 100% 100%);'
       this.redstyle += 'clip-path:polygon(0 ' + pin + '%, 100% 0, 100% 100%);'
       this.barboxname = 'barboxl';
+      this.barstyle += 'left:80px';
     },
     topNangle(angleval) {
       if (angleval <= 90) {
@@ -175,7 +177,7 @@ export default {
       color red
 .menubar
   top 0px
-  line-height 40px
+  line-height 20px
   font-family berlin
   color white
   position absolute
